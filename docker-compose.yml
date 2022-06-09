@@ -5,7 +5,7 @@ volumes:
 services:
 
   techefx-eureka-namng-service:
-    image: techefx-eureka-naming-server
+    image: microservicenamingserver
     ports:
       - "8761:8761"
     networks:
@@ -13,7 +13,7 @@ services:
 
 
   techefx-product-stock-service:
-    image: techefx-product-stock-service
+    image:  microstocktservice
     environment:
       - JAVA_OPTS=
         -DEUREKA_SERVER=http://techefx-eureka-namng-service:8761/eureka
@@ -23,14 +23,14 @@ services:
     #    links:
     #      - zipkin
     depends_on:
-      - techefx-eureka-namng-service
+      - microservicenamingserver
     #      - zipkin
     networks:
       - test-network
 
 
   techefx-product-enquiry-service:
-    image: techefx-product-enquiry-service
+    image: microenquiryservice
     environment:
       - JAVA_OPTS=
         -DEUREKA_SERVER=http://techefx-eureka-namng-service:8761/eureka
@@ -40,14 +40,14 @@ services:
     #   links:
     #     - zipkin
     depends_on:
-      - techefx-product-stock-service
+      - microstocktservice
     #     - zipkin
     networks:
       - test-network
 
 
   techefx-spring-cloud-api-gateway-service:
-    image: techefx-spring-cloud-api-gateway-service
+    image: mmicrogatewayapi
     environment:
       - JAVA_OPTS=
         -DEUREKA_SERVER=http://techefx-eureka-namng-service:8761/eureka
@@ -58,9 +58,9 @@ services:
     #   links:
     #     - zipkin
     depends_on:
-      - techefx-eureka-namng-service
-      - techefx-product-enquiry-service
-      - techefx-product-stock-service
+      - mmicrogatewayapi
+      - microenquiryservice	
+      - microstocktservice
     #      - zipkin
     networks:
       - test-network
@@ -80,7 +80,7 @@ services:
     ports:
       - "9090:9090"
     depends_on:
-      - techefx-product-stock-service
+      - microstocktservice
     networks:
       - test-network
 
@@ -102,7 +102,7 @@ services:
     ports:
       - "9411:9411"
     depends_on:
-      - techefx-eureka-namng-service
+      - microstocktservice
     networks:
       - test-network
 
